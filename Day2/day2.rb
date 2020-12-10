@@ -5,6 +5,7 @@ class DataLoader
 	def self.load(file)
 		data = []
 		File.open(file).each do |line|
+			next if line.chomp.empty?
 			data << line.chomp
 		end
 		data
@@ -162,3 +163,4 @@ end
 
 data = DataLoader.load('input.txt')
 
+#puts PasswordDatabaseChecker.new(data).get_valid_count
