@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-# Loads data into workable format
+# Loads data from file, returns array of lines
 class DataLoader
 	def self.load(file)
 		data = []
@@ -33,7 +33,7 @@ class RuleParser
 	end
 end
 
-# Check a single password
+# Check a single password, return validity
 class PasswordChecker
 	def self.check(line)
 		rule, password = DataLineParser.parse(line)
@@ -46,6 +46,13 @@ class PasswordChecker
 	def self.get_validity(range, letter, password)
 		count = password.count(letter)
 		range.include? count.to_i
+	end
+end
+
+# Check all the passwords
+class PasswordDatabaseChecker
+	def initialize(data)
+		@data = data
 	end
 end
 
@@ -121,4 +128,16 @@ class PasswordCheckerTest < Minitest::Test
 		actual = PasswordChecker.check(@test_data[2])
 		assert_equal(true, actual)
 	end	
+end
+
+class PasswordDatabaseCheckerTest < Minitest::Test
+	def setup
+		data = DataLoader.load('data_day_2.txt')
+		@tester = PasswordDatabaseChecker.new(data)
+	end
+
+	def test_initialize
+		actual = @tester.instance_variable_get(:@data).class
+		assert_equal(Array, actual)
+	end
 end
