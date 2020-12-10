@@ -65,15 +65,16 @@ end
 
 # Check all the passwords
 class PasswordDatabaseChecker
-	def initialize(data)
+	def initialize(data, updated=false)
 		@data = data
 		@valid_passwords = []
+		@updated = updated
 		check_all
 	end
 
 	def check_all
 		@data.each_index do |i|
-			valid = PasswordChecker.check(@data[i])
+			valid = PasswordChecker.check(@data[i]) unless @updated
 			@valid_passwords << i if valid
 		end
 	end
@@ -184,7 +185,7 @@ class PasswordCheckerTest < Minitest::Test
 	def test_third_line
 		actual = PasswordChecker.check(@test_data[2])
 		assert_equal(true, actual)
-	end	
+	end
 end
 
 class PasswordDatabaseCheckerTest < Minitest::Test
