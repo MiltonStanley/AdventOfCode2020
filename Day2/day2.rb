@@ -54,6 +54,7 @@ class PasswordDatabaseChecker
 	def initialize(data)
 		@data = data
 		@valid_passwords = []
+		check_all
 	end
 
 	def check_all
@@ -154,8 +155,10 @@ class PasswordDatabaseCheckerTest < Minitest::Test
 	end
 
 	def test_get_valid_count
-		@tester.check_all
 		actual = @tester.get_valid_count
 		assert_equal(2, actual)
 	end
 end
+
+data = DataLoader.load('input.txt')
+
