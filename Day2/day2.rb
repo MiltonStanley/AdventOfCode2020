@@ -33,7 +33,7 @@ end
 
 class DataLoaderTest < Minitest::Test
 	def test_load_works
-		actual = DataLoader.load('day2_test_data.txt')
+		actual = DataLoader.load('test_data.txt')
 		expected = [
 			'1-3 a: abcde',
 			'1-3 b: cdefg',
