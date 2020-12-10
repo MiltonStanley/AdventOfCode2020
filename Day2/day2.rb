@@ -216,3 +216,5 @@ end
 data = DataLoader.load('input.txt')
 
 puts PasswordDatabaseChecker.new(data).get_valid_count
+puts PasswordDatabaseChecker.new(data, true).get_valid_count
+puts
