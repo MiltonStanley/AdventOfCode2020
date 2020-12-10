@@ -32,9 +32,10 @@ class RuleParser
 	end
 end
 
+# Check a single password
 class PasswordChecker
-	def initialize(data)
-		@data = data
+	def initialize(line)
+		@line = line
 	end
 end
 
@@ -73,16 +74,11 @@ end
 
 class PasswordCheckerTest < Minitest::Test
 	def setup
-		test_data = [
-			'1-3 a: abcde',
-			'1-3 b: cdefg',
-			'2-9 c: ccccccccc'
-		]
-		@tester = PasswordChecker.new(test_data)
+		@tester = PasswordChecker.new('1-3 a: abcde')
 	end
 
 	def test_initialize
-		actual = @tester.instance_variable_get(:@data)
-		assert actual.class == Array
+		actual = @tester.instance_variable_get(:@line)
+		assert actual.class == String
 	end
 end
