@@ -32,8 +32,10 @@ class RuleParser
 	end
 end
 
-class Password
-	
+class PasswordChecker
+	def initialize(data)
+		@data = data
+	end
 end
 
 class DataLoaderTest < Minitest::Test
@@ -66,5 +68,21 @@ class RuleParserTest < Minitest::Test
 	def test_convert_count_to_range
 		range = RuleParser.send(:convert_count_to_range, '1-3')
 		assert_equal(1..3, range)
+	end
+end
+
+class PasswordCheckerTest < Minitest::Test
+	def setup
+		test_data = [
+			'1-3 a: abcde',
+			'1-3 b: cdefg',
+			'2-9 c: ccccccccc'
+		]
+		@tester = PasswordChecker.new(test_data)
+	end
+
+	def test_initialize
+		actual = @tester.instance_variable_get(:@data)
+		assert actual.class == Array
 	end
 end
