@@ -117,4 +117,7 @@ end
 
 file_name = 'day1Data.txt'
 data = DataLoader.load(file_name)
+
 puts Calculator.new(data, 2020).calculate
+puts Calculator.new(data, 2020).calculate_three
+puts
