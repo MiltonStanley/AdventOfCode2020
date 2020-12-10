@@ -21,9 +21,10 @@ end
 
 # Parses rule, returns [RANGE, letter]
 class RuleParser
-	def self.parse(rule)
+	def self.parse(rule, updated=false)
 		count, letter = rule.split(' ')
-		[convert_count_to_range(count), letter]
+		return [convert_count_to_index(count), letter] if updated
+		return [convert_count_to_range(count), letter] unless updated
 	end
 
 	private
@@ -31,6 +32,10 @@ class RuleParser
 	def self.convert_count_to_range(count)
 		start, stop = count.split('-')
 		(start.to_i..stop.to_i)
+	end
+
+	def self.convert_count_to_index(count)
+		count.split('-').map(&:to_i)
 	end
 end
 
@@ -94,6 +99,12 @@ class RuleParserTest < Minitest::Test
 	def test_parse
 		expected = [1..3,'a']
 		actual = RuleParser.parse('1-3 a')
+		assert_equal(expected, actual)
+	end
+
+	def test_parse_updated
+		expected = [[1,3], 'a']
+		actual = RuleParser.parse('1-3 a', true)
 		assert_equal(expected, actual)
 	end
 
@@ -163,4 +174,4 @@ end
 
 data = DataLoader.load('input.txt')
 
-#puts PasswordDatabaseChecker.new(data).get_valid_count
+puts PasswordDatabaseChecker.new(data).get_valid_count
