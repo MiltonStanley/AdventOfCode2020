@@ -20,6 +20,8 @@ class DataLineParser
 end
 
 # Parses rule, returns [RANGE, letter]
+# IF parse includes optional 2nd var true, return [array, letter]
+#    array is 2 values
 class RuleParser
 	def self.parse(rule, updated=false)
 		count, letter = rule.split(' ')
@@ -41,10 +43,10 @@ end
 
 # Check a single password, return validity
 class PasswordChecker
-	def self.check(line)
+	def self.check(line, updated=false)
 		rule, password = DataLineParser.parse(line)
-		range, letter = RuleParser.parse(rule)
-		validity = valid?(range, letter, password)
+		range, letter = RuleParser.parse(rule, updated)
+		validity = valid?(range, letter, password) unless updated
 	end
 
 	private
@@ -138,6 +140,13 @@ class PasswordCheckerTest < Minitest::Test
 		actual = PasswordChecker.send(:valid?, range, letter, password)
 		assert_equal(false, actual)
 	end
+
+	# def test_valid_when_true_updated
+	# 	arry = [1, 3]
+	# 	letter = 'a'
+	# 	password = 'abcde'
+	# 	actual = PasswordChecker.send(:valid?, arry, letter, password, true)
+	# end
 
 	def test_first_line
 		actual = PasswordChecker.check(@test_data[0])
