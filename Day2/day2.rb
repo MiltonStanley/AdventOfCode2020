@@ -53,6 +53,18 @@ end
 class PasswordDatabaseChecker
 	def initialize(data)
 		@data = data
+		@valid_passwords = []
+	end
+
+	def check_all
+		@data.each_index do |i|
+			valid = PasswordChecker.check(@data[i])
+			@valid_passwords << i if valid
+		end
+	end
+
+	def get_valid_count
+		@valid_passwords.count
 	end
 end
 
@@ -132,12 +144,18 @@ end
 
 class PasswordDatabaseCheckerTest < Minitest::Test
 	def setup
-		data = DataLoader.load('data_day_2.txt')
+		data = DataLoader.load('test_data.txt')
 		@tester = PasswordDatabaseChecker.new(data)
 	end
 
 	def test_initialize
 		actual = @tester.instance_variable_get(:@data).class
 		assert_equal(Array, actual)
+	end
+
+	def test_get_valid_count
+		@tester.check_all
+		actual = @tester.get_valid_count
+		assert_equal(2, actual)
 	end
 end
