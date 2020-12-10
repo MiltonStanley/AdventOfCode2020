@@ -55,6 +55,12 @@ class PasswordChecker
 		count = password.count(letter)
 		range.include? count.to_i
 	end
+
+	def self.updated_valid?(arry, letter, password)
+		good_positions = 0
+		arry.each { |i| good_positions += 1 if password[i-1] == letter }
+		good_positions == 1 ? true : false
+	end
 end
 
 # Check all the passwords
@@ -141,12 +147,13 @@ class PasswordCheckerTest < Minitest::Test
 		assert_equal(false, actual)
 	end
 
-	# def test_valid_when_true_updated
-	# 	arry = [1, 3]
-	# 	letter = 'a'
-	# 	password = 'abcde'
-	# 	actual = PasswordChecker.send(:valid?, arry, letter, password, true)
-	# end
+	def test_valid_when_true_updated
+		arry = [1, 3]
+		letter = 'a'
+		password = 'abcde'
+		actual = PasswordChecker.send(:updated_valid?, arry, letter, password)
+		assert_equal(true, actual)
+	end
 
 	def test_first_line
 		actual = PasswordChecker.check(@test_data[0])
