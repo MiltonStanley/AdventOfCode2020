@@ -44,11 +44,8 @@ class PasswordChecker
 	private
 
 	def self.get_validity(range, letter, password)
-		# puts password.class
-		# puts letter.class
-		# puts range.class
-		# count = password.count(letter)
-		# range.include? count.to_i
+		count = password.count(letter)
+		range.include? count.to_i
 	end
 end
 
@@ -93,6 +90,15 @@ class PasswordCheckerTest < Minitest::Test
 			'2-9 c: ccccccccc'
 		]
 	end
+
+	def test_get_validity_when_true
+		range = 1..3
+		letter = 'a'
+		password = 'abcde'
+		actual = PasswordChecker.send(:get_validity, range, letter, password)
+		assert_equal(true, actual)
+	end
+
 
 	# def test_first_line
 	# 	actual = PasswordChecker.check(@test_data[0])
