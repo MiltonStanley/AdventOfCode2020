@@ -22,6 +22,7 @@ end
 class RuleParser
 	def self.parse(rule)
 		count, letter = rule.split(' ')
+		[convert_count_to_range(count), letter]
 	end
 
 	private
@@ -35,7 +36,19 @@ end
 # Check a single password
 class PasswordChecker
 	def self.check(line)
-		
+		rule, password = DataLineParser.parse(line)
+		range, letter = RuleParser.parse(rule)
+		validity = get_validity(range, letter, password)
+	end
+
+	private
+
+	def self.get_validity(range, letter, password)
+		# puts password.class
+		# puts letter.class
+		# puts range.class
+		# count = password.count(letter)
+		# range.include? count.to_i
 	end
 end
 
@@ -61,7 +74,7 @@ end
 
 class RuleParserTest < Minitest::Test
 	def test_parse
-		expected = ['1-3','a']
+		expected = [1..3,'a']
 		actual = RuleParser.parse('1-3 a')
 		assert_equal(expected, actual)
 	end
@@ -81,7 +94,8 @@ class PasswordCheckerTest < Minitest::Test
 		]
 	end
 
-	def test_first_line
-		assert_equal(true, true)
-	end	
+	# def test_first_line
+	# 	actual = PasswordChecker.check(@test_data[0])
+	# 	assert_equal(true, actual)
+	# end	
 end
