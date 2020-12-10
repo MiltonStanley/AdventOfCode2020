@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 
+# Loads data into workable format
 class DataLoader
 	def self.load(file)
 		data = []
@@ -10,12 +11,14 @@ class DataLoader
 	end
 end
 
+# Parses each line of data, returns [rule, password]
 class DataLineParser
 	def self.parse(line)
 		rule, password = line.split(': ')
 	end
 end
 
+# Parses rule, returns [count, letter]
 class RuleParser
 	def self.parse(rule)
 		count, letter = rule.split(' ')
@@ -24,7 +27,7 @@ end
 
 class PasswordTester
 	def self.test(rule, password)
-
+		count, letter = RuleParser.parse(rule)
 	end
 end
 
