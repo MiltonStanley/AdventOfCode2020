@@ -72,6 +72,7 @@ class CalculatorTest < Minitest::Test
 		@test_data = [1721, 979, 366, 299, 675, 1456]
 		@test_goal_sum = 2020
 		@test_answer = 514579
+		@test_answer_three = 241861950
 		@tester = Calculator.new(@test_data, @test_goal_sum)
 	end
 
@@ -96,6 +97,10 @@ class CalculatorTest < Minitest::Test
 	def test_find_sum_of_three_works
 		sum = @tester.send(:find_sum_of_three)
 		assert_equal([979, 366, 675].sort, sum)
+	end
+
+	def test_calculate_three_works
+		assert_equal(@test_answer_three, @tester.calculate_three)
 	end
 end
 
