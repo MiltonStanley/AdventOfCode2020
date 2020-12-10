@@ -38,12 +38,12 @@ class PasswordChecker
 	def self.check(line)
 		rule, password = DataLineParser.parse(line)
 		range, letter = RuleParser.parse(rule)
-		validity = get_validity(range, letter, password)
+		validity = valid?(range, letter, password)
 	end
 
 	private
 
-	def self.get_validity(range, letter, password)
+	def self.valid?(range, letter, password)
 		count = password.count(letter)
 		range.include? count.to_i
 	end
@@ -110,19 +110,19 @@ class PasswordCheckerTest < Minitest::Test
 		]
 	end
 
-	def test_get_validity_when_true
+	def test_valid_when_true
 		range = 1..3
 		letter = 'a'
 		password = 'abcde'
-		actual = PasswordChecker.send(:get_validity, range, letter, password)
+		actual = PasswordChecker.send(:valid?, range, letter, password)
 		assert_equal(true, actual)
 	end
 
-	def test_get_validity_when_false
+	def test_valid_when_false
 		range = 1..3
 		letter = 'b'
 		password = 'cdefg'
-		actual = PasswordChecker.send(:get_validity, range, letter, password)
+		actual = PasswordChecker.send(:valid?, range, letter, password)
 		assert_equal(false, actual)
 	end
 
