@@ -21,6 +21,11 @@ class Calculator
 		get_product(sum)
 	end
 
+	def calculate_three
+		sum = find_sum_of_three
+		get_product(sum)
+	end
+
 	private
 
 	def find_sum()
@@ -35,7 +40,25 @@ class Calculator
 				end		
 			end
 		end
-		[x, y]
+		[x, y].sort
+	end
+
+	def find_sum_of_three
+		x, y, z = nil
+		@data.each_index do |i|
+			a = @data[i]
+			@data[i+1..-1].each_index do |j|
+				b = @data[j]
+				@data[j+1..-i].each do |c|
+					sum = a + b + c
+					if sum == @goal_sum
+						x, y, z = a, b, c
+						break
+					end
+				end
+			end
+		end
+		[x, y, z].sort
 	end
 
 	def get_product(summers)
@@ -58,7 +81,7 @@ class CalculatorTest < Minitest::Test
 
 	def test_find_sum_works
 		sum = @tester.send(:find_sum)
-		assert_equal([1721, 299], sum)
+		assert_equal([1721, 299].sort, sum)
 	end
 
 	def test_get_product_works
@@ -68,6 +91,11 @@ class CalculatorTest < Minitest::Test
 
 	def test_calculate_works
 		assert_equal(@test_answer, @tester.calculate)
+	end
+
+	def test_find_sum_of_three_works
+		sum = @tester.send(:find_sum_of_three)
+		assert_equal([979, 366, 675].sort, sum)
 	end
 end
 
