@@ -18,17 +18,22 @@ class DataLineParser
 	end
 end
 
-# Parses rule, returns [count, letter]
+# Parses rule, returns [RANGE, letter]
 class RuleParser
 	def self.parse(rule)
 		count, letter = rule.split(' ')
 	end
+
+	private
+
+	def self.convert_count_to_range(count)
+		start, stop = count.split('-')
+		(start.to_i..stop.to_i)
+	end
 end
 
-class PasswordTester
-	def self.test(rule, password)
-		count, letter = RuleParser.parse(rule)
-	end
+class Password
+	
 end
 
 class DataLoaderTest < Minitest::Test
@@ -56,5 +61,10 @@ class RuleParserTest < Minitest::Test
 		expected = ['1-3','a']
 		actual = RuleParser.parse('1-3 a')
 		assert_equal(expected, actual)
+	end
+
+	def test_convert_count_to_range
+		range = RuleParser.send(:convert_count_to_range, '1-3')
+		assert_equal(1..3, range)
 	end
 end
