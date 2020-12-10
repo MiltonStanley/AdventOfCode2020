@@ -39,8 +39,7 @@ class Calculator
 	end
 
 	def get_product(summers)
-		x, y = summers
-		x * y
+		summers.inject(:*)
 	end
 end
 
