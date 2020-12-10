@@ -155,6 +155,22 @@ class PasswordCheckerTest < Minitest::Test
 		assert_equal(true, actual)
 	end
 
+	def test_valid_when_too_few_updated
+		arry = [1, 3]
+		letter = 'b'
+		password = 'cdefg'
+		actual = PasswordChecker.send(:updated_valid?, arry, letter, password)
+		assert_equal(false, actual)
+	end
+
+	def test_valid_when_too_many_updated
+		arry = [2, 9]
+		letter = 'c'
+		password = 'ccccccccc'
+		actual = PasswordChecker.send(:updated_valid?, arry, letter, password)
+		assert_equal(false, actual)
+	end
+
 	def test_first_line
 		actual = PasswordChecker.check(@test_data[0])
 		assert_equal(true, actual)
