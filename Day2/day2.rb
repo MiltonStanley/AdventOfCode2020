@@ -75,6 +75,7 @@ class PasswordDatabaseChecker
 	def check_all
 		@data.each_index do |i|
 			valid = PasswordChecker.check(@data[i]) unless @updated
+			valid = PasswordChecker.check(@data[i], true) if @updated
 			@valid_passwords << i if valid
 		end
 	end
