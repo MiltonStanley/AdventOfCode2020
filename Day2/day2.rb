@@ -99,7 +99,13 @@ class PasswordCheckerTest < Minitest::Test
 		assert_equal(true, actual)
 	end
 
-
+	def test_get_validity_when_false
+		range = 1..3
+		letter = 'b'
+		password = 'cdefg'
+		actual = PasswordChecker.send(:get_validity, range, letter, password)
+		assert_equal(false, actual)
+	end
 	# def test_first_line
 	# 	actual = PasswordChecker.check(@test_data[0])
 	# 	assert_equal(true, actual)
