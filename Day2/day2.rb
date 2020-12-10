@@ -177,12 +177,12 @@ class PasswordCheckerTest < Minitest::Test
   def test_first_line
     actual = PasswordChecker.check(@test_data[0])
     assert_equal(true, actual)
-  end  
+  end
 
   def test_second_line
     actual = PasswordChecker.check(@test_data[1])
     assert_equal(false, actual)
-  end  
+  end
 
   def test_third_line
     actual = PasswordChecker.check(@test_data[2])

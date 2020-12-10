@@ -35,9 +35,9 @@ class Calculator
       @data[i+1..-1].each do |b|
         sum = a + b
         if sum == @goal_sum
-          x,y = a,b 
+          x,y = a,b
           break
-        end    
+        end
       end
     end
     [x, y].sort
