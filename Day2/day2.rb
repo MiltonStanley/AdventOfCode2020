@@ -47,6 +47,8 @@ class PasswordChecker
 		rule, password = DataLineParser.parse(line)
 		range, letter = RuleParser.parse(rule, updated)
 		validity = valid?(range, letter, password) unless updated
+		validity = updated_valid?(range, letter, password) if updated
+		return validity
 	end
 
 	private
@@ -74,8 +76,7 @@ class PasswordDatabaseChecker
 
 	def check_all
 		@data.each_index do |i|
-			valid = PasswordChecker.check(@data[i]) unless @updated
-			valid = PasswordChecker.check(@data[i], true) if @updated
+			valid = PasswordChecker.check(@data[i], @updated)
 			@valid_passwords << i if valid
 		end
 	end
@@ -193,6 +194,7 @@ class PasswordDatabaseCheckerTest < Minitest::Test
 	def setup
 		data = DataLoader.load('test_data.txt')
 		@tester = PasswordDatabaseChecker.new(data)
+		@tester_updated = PasswordDatabaseChecker.new(data, true)
 	end
 
 	def test_initialize
@@ -203,6 +205,11 @@ class PasswordDatabaseCheckerTest < Minitest::Test
 	def test_get_valid_count
 		actual = @tester.get_valid_count
 		assert_equal(2, actual)
+	end
+
+	def test_get_valid_count_updated
+		actual = @tester_updated.get_valid_count
+		assert_equal(1, actual)
 	end
 end
 
