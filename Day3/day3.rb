@@ -28,6 +28,13 @@ class DataConverter
   end
 end
 
+# Check if a given square has a tree; returns true (tree) or false (open)
+class TreeChecker
+  def self.check(char)
+    char == '#' ? true : false
+  end
+end
+
 class DataLoaderTest < Minitest::Test
   def test_parse
     test_file = 'test_input.txt'
@@ -65,5 +72,15 @@ class DataConverterTest < Minitest::Test
     ]
     actual = DataConverter.convert(test_data)
     assert_equal(expected, actual)
+  end
+end
+
+class TreeCheckerTest < Minitest::Test
+  def test_check_tree
+    assert_equal(true, TreeChecker.check('#'))
+  end
+
+  def test_check_open_space
+    assert_equal(false, TreeChecker.check('.'))
   end
 end
