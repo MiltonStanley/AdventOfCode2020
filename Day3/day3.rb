@@ -35,6 +35,23 @@ class TreeChecker
   end
 end
 
+# Actual run the simulation, counting trees hit along the way
+class TobogganSimulator
+  def self.count(data)
+    location_row, location_column = [-1,-3]
+    trees_encountered = 0
+    puts
+    data.each do |line|
+      location_row += 1
+      break if location_row > data.length
+      location_column += 3
+      location_column = location_column - line.length if location_column > line.length
+      trees_encountered += 1 if TreeChecker.check(line[location_column])
+    end
+    trees_encountered
+  end
+end
+
 class DataLoaderTest < Minitest::Test
   def test_parse
     test_file = 'test_input.txt'
@@ -82,5 +99,24 @@ class TreeCheckerTest < Minitest::Test
 
   def test_check_open_space
     assert_equal(false, TreeChecker.check('.'))
+  end
+end
+
+class TobogganSimulatorTest < Minitest::Test
+  def test_count_trees
+    test_data = [
+      '..##.......',
+      '#...#...#..',
+      '.#....#..#.',
+      '..#.#...#.#',
+      '.#...##..#.',
+      '..#.##.....',
+      '.#.#.#....#',
+      '.#........#',
+      '#.##...#...',
+      '#...##....#',
+      '.#..#...#.#'
+    ]
+    assert_equal(7, TobogganSimulator.count(test_data))
   end
 end
