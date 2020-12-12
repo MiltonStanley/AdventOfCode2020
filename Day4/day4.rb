@@ -93,6 +93,15 @@ class DataConverterTest < Minitest::Test
     actual =DataConverter.send(:split_into_key_val_pairs, line)
     assert_equal(expected, actual)
   end
+
+  def test_compile_line_1
+  end
+
+  def test_compile_line_2
+  end
+
+  def test_compile_line_3
+  end
 end
 
 class PassportTest < Minitest::Test
