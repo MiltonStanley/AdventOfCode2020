@@ -1,5 +1,15 @@
 require 'minitest/autorun'
 
+class DataLoader
+  def self.load(file)
+    data = []
+    File.open(file).each do |line|
+      data << line.chomp
+    end
+    data
+  end
+end
+
 # Passport info holder
 class Passport < Hash
 
@@ -16,6 +26,18 @@ class Passport < Hash
 
   def self.valid?
     !(@byr.nil? && @iyr.nil? && @eyr.nil? && @hgt.nil? && @hcl.nil? && @ecl.nil? && @pid.nil? && @cid.nil?)
+  end
+end
+
+### TESTS ###
+
+class DataloaderTest < Minitest::Test
+  def setup
+    @test_file = 'test_input.txt'
+  end
+
+  def test_load_works
+    assert_equal(13, DataLoader.load(@test_file).length)
   end
 end
 
