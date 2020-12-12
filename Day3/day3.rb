@@ -38,15 +38,22 @@ end
 # Actual run the simulation, counting trees hit along the way
 class TobogganSimulator
   def self.count(data)
-    location_row, location_column = [-1,-3]
+    location = {:row => -1, :col => -3}
     trees_encountered = 0
-    puts
+
     data.each do |line|
-      location_row += 1
-      break if location_row > data.length
-      location_column += 3
-      location_column = location_column - line.length if location_column > line.length
-      trees_encountered += 1 if TreeChecker.check(line[location_column])
+      max_row = data.length
+      max_col = line.length
+      
+      # Increment row, break if we're at the bottom
+      location[:row] += 1
+      break if location[:row] > max_row
+      # Increment col, loop it around if we go past the end
+      location[:col] += 3
+      if location[:col] > max_col
+        location[:col] -= max_col
+      end
+      trees_encountered += 1 if TreeChecker.check(line[location[:col]])
     end
     trees_encountered
   end
@@ -120,3 +127,7 @@ class TobogganSimulatorTest < Minitest::Test
     assert_equal(7, TobogganSimulator.count(test_data))
   end
 end
+
+data = DataLoader.load('input.txt')
+
+puts TobogganSimulator.count(data)
