@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 
+# Loads data as lines; keeps blank lines; returns array
 class DataLoader
   def self.load(file)
     data = []
@@ -7,6 +8,28 @@ class DataLoader
       data << line.chomp
     end
     data
+  end
+end
+
+# Takes DataLoader.data as input; outputs an array of passports
+class DataConverter
+  def self.convert(data)
+    passports = []
+    passport_count = 0
+    4
+  end
+
+  private
+
+  # First, split the line into field pairs
+  #   and return array of strings ['key:val', 'key:val'] etc
+  def split_into_key_val_pairs(line)
+    parts = line.split(' ')
+  end
+  
+  # Then, split the field pairs into key-val hash pairs
+  #   and return a hash.
+  def compile_line(parts)
   end
 end
 
@@ -38,6 +61,16 @@ class DataloaderTest < Minitest::Test
 
   def test_load_works
     assert_equal(13, DataLoader.load(@test_file).length)
+  end
+end
+
+class DataConverterTest < Minitest::Test
+  def setup
+    @data = DataLoader.load('test_input.txt')
+  end
+
+  def test_has_correct_number_of_passports
+    assert_equal(4, DataConverter.convert(@data))
   end
 end
 
