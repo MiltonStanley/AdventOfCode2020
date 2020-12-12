@@ -23,7 +23,7 @@ class DataConverter
 
   # First, split the line into field pairs
   #   and return array of strings ['key:val', 'key:val'] etc
-  def split_into_key_val_pairs(line)
+  def self.split_into_key_val_pairs(line)
     parts = line.split(' ')
   end
   
@@ -71,6 +71,27 @@ class DataConverterTest < Minitest::Test
 
   def test_has_correct_number_of_passports
     assert_equal(4, DataConverter.convert(@data))
+  end
+
+  def test_split_into_pairs_1
+    line = 'hcl:#ae17e1 iyr:2013'
+    expected = %w[hcl:#ae17e1 iyr:2013]
+    actual = DataConverter.send(:split_into_key_val_pairs, line)
+    assert_equal(expected, actual)
+  end
+
+  def test_split_into_pairs_2 
+    line = 'iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884'
+    expected = %w[iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884]
+    actual = DataConverter.send(:split_into_key_val_pairs, line)
+    assert_equal(expected, actual)
+  end
+
+  def test_split_into_pairs_3
+    line = 'eyr:2024'
+    expected = %w[eyr:2024]
+    actual =DataConverter.send(:split_into_key_val_pairs, line)
+    assert_equal(expected, actual)
   end
 end
 
