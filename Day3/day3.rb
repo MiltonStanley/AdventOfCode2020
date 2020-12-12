@@ -78,3 +78,8 @@ class TobogganSimulatorTest < Minitest::Test
     assert_equal(7, TobogganSimulator.count(test_data))
   end
 end
+
+
+data = DataLoader.load('input.txt')
+
+puts TobogganSimulator.count(data)
