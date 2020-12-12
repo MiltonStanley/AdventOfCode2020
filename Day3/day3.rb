@@ -59,6 +59,21 @@ class TobogganSimulator
   end
 end
 
+# New, simple simulator
+class TobogganSimulatorNew
+  def self.count(data)
+    increment = 3
+    location = -3
+    tree_count = 0
+    data.each do |line|
+      location += 3
+      mod_location = location % line.length
+      tree_count += 1 if TreeChecker.check(line[mod_location])
+    end
+    tree_count
+  end
+end
+
 class DataLoaderTest < Minitest::Test
   def test_parse
     test_file = 'test_input.txt'
@@ -125,6 +140,25 @@ class TobogganSimulatorTest < Minitest::Test
       '.#..#...#.#'
     ]
     assert_equal(7, TobogganSimulator.count(test_data))
+  end
+end
+
+class TobogganSimulatorNewTest < Minitest::Test
+  def test_count_trees
+    test_data = [
+      '..##.......',
+      '#...#...#..',
+      '.#....#..#.',
+      '..#.#...#.#',
+      '.#...##..#.',
+      '..#.##.....',
+      '.#.#.#....#',
+      '.#........#',
+      '#.##...#...',
+      '#...##....#',
+      '.#..#...#.#'
+    ]
+    assert_equal(7, TobogganSimulatorNew.count(test_data))
   end
 end
 
