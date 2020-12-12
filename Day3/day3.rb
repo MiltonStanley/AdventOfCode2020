@@ -29,10 +29,10 @@ class TobogganSimulator
 
     tree_count = 0
 
-    data.each do |line|
+    data.each_index do |i|
+      next if i % down_increment > 0
       column += right_increment
-      row += 1
-      mod_row = row % down_increment
+      line = data[i]
       mod_column = column % line.length
       tree_count += 1 if TreeChecker.check(line[mod_column])
     end
@@ -127,7 +127,7 @@ class TobogganSimulatorTest < Minitest::Test
       {:right_increment => 7, :down_increment => 1},
       {:right_increment => 1, :down_increment => 2}
     ]
-    #assert_equal(336, TobogganSimulator.multiply_count(@test_data,test_traversals))
+    assert_equal(336, TobogganSimulator.multiply_count(@test_data,test_traversals))
   end
 end
 
@@ -143,4 +143,4 @@ all_traversals = [
   {:right_increment => 7, :down_increment => 1},
   {:right_increment => 1, :down_increment => 2}
 ]
-#puts TobogganSimulator.multiply_count(data, all_traversals)
+puts TobogganSimulator.multiply_count(data, all_traversals)
