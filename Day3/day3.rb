@@ -39,6 +39,12 @@ class TobogganSimulator
     end
     tree_count
   end
+
+  def self.multiply_count(data, traversals)
+    total = []
+    traversals.each { |update| total << self.count(data, update) }
+    total.inject(&:*)
+  end
 end
 
 class DataLoaderTest < Minitest::Test
@@ -112,6 +118,17 @@ class TobogganSimulatorTest < Minitest::Test
   def test_count_trees_updated_5
     update = {:right_increment => 1, :down_increment => 2}
     assert_equal(2, TobogganSimulator.count(@test_data, update))
+  end
+
+  def test_count_multiplier
+    test_traversals = [
+      {:right_increment => 1, :down_increment => 1},
+      {:right_increment => 3, :down_increment => 1},
+      {:right_increment => 5, :down_increment => 1},
+      {:right_increment => 7, :down_increment => 1},
+      {:right_increment => 1, :down_increment => 2}
+    ]
+    assert_equal(336, TobogganSimulator.multiply_count(@test_data,test_traversals))
   end
 end
 
