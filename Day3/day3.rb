@@ -21,14 +21,21 @@ end
 
 # New, simple simulator
 class TobogganSimulator
-  def self.count(data)
-    increment = 3
-    location = -3
+  def self.count(data, *update)
+    right_increment = 3 || update[:right_increment]
+    down_increment = 1 || update[:down_increment]
+    column = 0 - right_increment
+    row = 0 - down_increment
+
     tree_count = 0
+
     data.each do |line|
-      location += 3
-      mod_location = location % line.length
-      tree_count += 1 if TreeChecker.check(line[mod_location])
+      column += right_increment
+      row += down_increment
+      mod_row = row % down_increment
+      next if mod_row != 0
+      mod_column = column % line.length
+      tree_count += 1 if TreeChecker.check(line[mod_column])
     end
     tree_count
   end
@@ -61,8 +68,9 @@ class TreeCheckerTest < Minitest::Test
 end
 
 class TobogganSimulatorTest < Minitest::Test
-  def test_count_trees
-    test_data = [
+
+  def setup
+    @test_data = [
       '..##.......',
       '#...#...#..',
       '.#....#..#.',
@@ -75,7 +83,14 @@ class TobogganSimulatorTest < Minitest::Test
       '#...##....#',
       '.#..#...#.#'
     ]
-    assert_equal(7, TobogganSimulator.count(test_data))
+  end
+
+  def test_count_trees
+    assert_equal(7, TobogganSimulator.count(@test_data))
+  end
+
+  def test_count_trees_updated
+    assert_equal(7, TobogganSimulator.count(@test_data, [3,1]))
   end
 end
 
