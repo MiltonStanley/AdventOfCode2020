@@ -21,9 +21,9 @@ end
 
 # New, simple simulator
 class TobogganSimulator
-  def self.count(data, *update)
-    right_increment = 3 || update[:right_increment]
-    down_increment = 1 || update[:down_increment]
+  def self.count(data, update={}) 
+    right_increment = update[:right_increment] || 3
+    down_increment = update[:down_increment] || 1
     column = 0 - right_increment
     row = 0 - down_increment
 
@@ -89,8 +89,29 @@ class TobogganSimulatorTest < Minitest::Test
     assert_equal(7, TobogganSimulator.count(@test_data))
   end
 
-  def test_count_trees_updated
-    assert_equal(7, TobogganSimulator.count(@test_data, [3,1]))
+  def test_count_trees_updated_1
+    update = {:right_increment => 1, :down_increment => 1}
+    assert_equal(2, TobogganSimulator.count(@test_data, update))
+  end
+
+  def test_count_trees_updated_2
+    update = {:right_increment => 3, :down_increment => 1}
+    assert_equal(7, TobogganSimulator.count(@test_data, update))
+  end
+
+  def test_count_trees_updated_3
+    update = {:right_increment => 5, :down_increment => 1}
+    assert_equal(3, TobogganSimulator.count(@test_data, update))
+  end
+
+  def test_count_trees_updated_4
+    update = {:right_increment => 7, :down_increment => 1}
+    assert_equal(4, TobogganSimulator.count(@test_data, update))
+  end
+
+  def test_count_trees_updated_5
+    update = {:right_increment => 1, :down_increment => 2}
+    assert_equal(2, TobogganSimulator.count(@test_data, update))
   end
 end
 
