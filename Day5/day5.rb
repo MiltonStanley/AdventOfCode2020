@@ -15,8 +15,12 @@ class BinaryPartitioner
   def self.partition(code)
     row = code[0..6]
     seat = code[7..9]
-    #row = convert(row)
-    #seat = convert(seat)
+    row = convert(row)
+    seat = convert(seat)
+  end
+
+  def self.calculate_seat_id(seat)
+    seat[0] * 8 + seat[1]
   end
 
   def self.convert(code)
@@ -54,6 +58,13 @@ class BinaryPartitionerTest < Minitest::Test
       actual = BinaryPartitioner.partition(code)
     #  assert_equal(expected,actual)
     end
+  end
+
+  def test_calculate_seat_id
+    expected = 357
+    seat_array = [44, 5]
+    actual = BinaryPartitioner.send(:calculate_seat_id, seat_array)
+    assert_equal(expected, actual)
   end
 
   def test_convert
