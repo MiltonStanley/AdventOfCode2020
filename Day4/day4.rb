@@ -59,6 +59,10 @@ end
 # Passport info holder
 class Passport < Hash
   def valid?
+    (contains_all_fields?)
+  end
+
+  def contains_all_fields?
     !(self['byr'].nil? || self['iyr'].nil? || self['eyr'].nil? || self['hgt'].nil? || 
       self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil?)# || self['cid'].nil?)
   end
@@ -157,10 +161,45 @@ end
 class PassportTest < Minitest::Test
   def setup
     @passport = Passport.new
+    @passport_with_missing = Passport.new
+    @passport_with_missing.merge!( { 'hcl' => '#ae17e1' })
+    full = {'ecl' => 'gry',
+    'pid' => '860033327',
+    'eyr' => '2020',
+    'hcl' => '#fffffd',
+    'byr' => '1937',
+    'iyr' => '2017',
+    'cid' => '147',
+    'hgt' =>  '183cm' }
+    @passport_with_all = Passport.new
+    @passport_with_all.merge!(full)
   end
 
-  def test_valid?
+  def test_valid_when_empty
     assert_equal(false, @passport.valid?)
+  end
+
+  def test_valid_when_missing
+    assert_equal(false, @passport_with_missing.valid?)
+  end
+
+  def test_valid_when_full
+    assert_equal(true, @passport_with_all.valid?)
+  end
+
+  def test_contains_all_fields_when_blank?
+    actual = @passport.send(:contains_all_fields?)
+    assert_equal(false, actual)
+  end
+
+  def test_contains_all_fields_when_missing?
+    actual = @passport_with_missing.send(:contains_all_fields?)
+    assert_equal(false, actual)
+  end
+
+  def test_contains_all_fields_when_full?
+    actual = @passport_with_all.send(:contains_all_fields?)
+    assert_equal(true, actual)
   end
 
   def test_merge
@@ -186,4 +225,4 @@ end
 
 data = DataLoader.load('input.txt')
 
-#puts TobogganSimulator.count(data)
+puts ValidPassportCounter.get_valid_count(data)
