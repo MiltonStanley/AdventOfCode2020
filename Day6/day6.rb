@@ -24,6 +24,8 @@ class DataConverter
         next
       end
       answers_array = split_line_into_answers(line)
+      combine_with_other_group_answers(group_answers[total_group_count], answers_array)
+      group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
     end
     group_answers
   end
@@ -80,6 +82,16 @@ class DataConverterTest < Minitest::Test
 
   def test_has_correct_number_of_groups
     assert_equal(5, DataConverter.convert(@data).length)
+  end
+
+  def test_has_right_answers_per_group
+    answers = [3, 3, 3, 1, 1]
+    answers.each_index do |i|
+      groups = DataConverter.convert(@data)
+      expected = answers[i]
+      actual = groups[i].length
+      assert_equal(expected, actual)
+    end
   end
 end
 
