@@ -62,11 +62,12 @@ end
 
 class MissingSeatFinder
   def self.find(ids, max)
-    (1..max).each do |i|
-      next if ids.include? i
-
+    missing_seat = nil
+    (1..max).each do |id|
+      next if ids.include? id
+      missing_seat = id if neighbors_exist?(id, ids)
     end
-    11
+    missing_seat
   end
 
   def self.neighbors_exist?(id, ids)
