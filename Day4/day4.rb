@@ -66,7 +66,14 @@ end
 
 # Count how many passports are valid
 class ValidPassportCounter
-
+  def self.get_valid_count(data)
+    valid_count = 0
+    all_passports = DataConverter.convert(data)
+    all_passports.each do |this_passport|
+      valid_count += 1 if this_passport.valid?
+    end
+    valid_count
+  end
 end
 
 ### TESTS ###
@@ -171,10 +178,12 @@ class ValidPassportCounterTest < Minitest::Test
   end
 
   def test_valid_count
-    valid_count = 0
-    @all_passports.each do |this_passport|
-      valid_count += 1 if this_passport.valid?
-    end
-    assert_equal(2, valid_count)
+    expected = 2
+    actual = ValidPassportCounter.get_valid_count(@data)
+    assert_equal(expected, actual)
   end
 end
+
+data = DataLoader.load('input.txt')
+
+#puts TobogganSimulator.count(data)
