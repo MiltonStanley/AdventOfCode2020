@@ -80,8 +80,8 @@ class Passport < Hash
     (1920..2002).include? byr.to_i
   end
 
-  def iyr_valid?(iyr)
-    (2010..2020).include? iyr
+  def self.iyr_valid?(iyr)
+    (2010..2020).include? iyr.to_i
   end
 
   def eyr_valid?(eyr)
@@ -260,6 +260,16 @@ class PassportTest < Minitest::Test
       '2021' => false
     }.each do |year, expected|
       actual = Passport.send(:byr_valid?, year)
+      assert_equal(expected, actual)
+    end
+  end
+
+  def test_iyr_valid?
+    { '1900' => false,
+      '2010' => true,
+      '2021' => false
+    }.each do |year, expected|
+      actual = Passport.send(:iyr_valid?, year)
       assert_equal(expected, actual)
     end
   end
