@@ -23,7 +23,7 @@ class DataConverter
         group_answers[total_group_count] = []
         next
       end
-      answers = split_line_into_answers(line)
+      answers_array = split_line_into_answers(line)
     end
     group_answers
   end
@@ -36,7 +36,8 @@ class DataConverter
   end
 
   # Then, combine those with all the other answers
-  def self.combine_with_other_group_answers
+  def self.combine_with_other_group_answers(group, this)
+    group.concat(this)
   end
 
   # Finally, clean up data by dropping duplicates
@@ -48,6 +49,14 @@ end
 class DataConverterTest < Minitest::Test
   def setup
     @data = DataLoader.load('test_input.txt')
+  end
+
+  def test_combine_with_other_group_answers
+    group = %w[a b c]
+    this = %w[x y z]
+    expected = %w[a b c x y z]
+    actual = DataConverter.send(:combine_with_other_group_answers, group, this)
+    assert_equal(expected, actual)
   end
 
   def test_split_line_into_answers
