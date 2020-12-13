@@ -11,6 +11,17 @@ class DataLoader
   end
 end
 
+class LargestIDFinder
+  def self.find(data)
+    ids = []
+    data.each do |code|
+      id = BinaryPartitioner.partition(code)[2]
+      ids << id
+    end
+    ids.max
+  end
+end
+
 class BinaryPartitioner
   def self.partition(code)
     row = code[0..6]
@@ -87,5 +98,14 @@ class BinaryPartitionerTest < Minitest::Test
       actual = BinaryPartitioner.send(:convert_code_to_binary, code)
       assert_equal(expected, actual)
     end
+  end
+end
+
+class LargestIDFinderTest <Minitest::Test
+  def test_find_highest_id
+    data = DataLoader.load('test_input.txt')
+    actual = LargestIDFinder.find(data)
+    expected = 820
+    assert_equal(expected, actual)
   end
 end
