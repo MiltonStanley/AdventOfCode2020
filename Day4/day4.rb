@@ -66,6 +66,51 @@ class Passport < Hash
     !(self['byr'].nil? || self['iyr'].nil? || self['eyr'].nil? || self['hgt'].nil? || 
       self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil?)# || self['cid'].nil?)
   end
+
+  def field_is_valid?(field)
+    rules = {
+
+      'hcl' => /^#([a-zA-Z]|\d){6}$/,
+      'ecl' => %w[amb blu brn gry grn hzl oth],
+      'pid' => /^\d{9}$/
+    }
+  end
+
+  def self.byr_valid?(byr)
+    (1920..2002).include? byr.to_i
+  end
+
+  def iyr_valid?(iyr)
+    (2010..2020).include? iyr
+  end
+
+  def eyr_valid?(eyr)
+    (2020..2030).include? eyr
+  end
+
+  def hgt_valid?(hgt)
+    num = height[..-3].to_i
+    unit = height[-2..]
+    if unit == 'cm'
+      return (150..193).include?(num)
+    elsif unit == 'in'
+      return (59..76).include?(num)
+    else
+      return false
+    end
+  end
+
+  def hcl_valid?(hcl)
+    (1920..2002).include? byr
+  end
+
+  def ecl_valid?(ecl)
+    (1920..2002).include? byr
+  end
+
+  def pid_valid?(pid)
+    (1920..2002).include? byr
+  end
 end
 
 # Count how many passports are valid
@@ -207,6 +252,16 @@ class PassportTest < Minitest::Test
     @passport.merge!({ 'hcl' => '#ae17e1' })
     @passport.merge!({ 'iyr' => '2013' } )
     assert_equal(expected, @passport)
+  end
+
+  def test_byr_valid?
+    { '1900' => false,
+      '1920' => true,
+      '2021' => false
+    }.each do |year, expected|
+      actual = Passport.send(:byr_valid?, year)
+      assert_equal(expected, actual)
+    end
   end
 end
 
