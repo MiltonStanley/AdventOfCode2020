@@ -41,7 +41,8 @@ class DataConverter
   end
 
   # Finally, clean up data by dropping duplicates
-  def self.clean_up_duplicates
+  def self.clean_up_duplicates(group)
+    group.uniq
   end
 end
 ### TESTS ###
@@ -49,6 +50,13 @@ end
 class DataConverterTest < Minitest::Test
   def setup
     @data = DataLoader.load('test_input.txt')
+  end
+
+  def test_clean_up_duplicates
+    group = %w[a b c c d e f]
+    expected = %w[a b c d e f]
+    actual = DataConverter.send(:clean_up_duplicates, group)
+    assert_equal(expected, actual)
   end
 
   def test_combine_with_other_group_answers
