@@ -167,3 +167,8 @@ end
 data = DataLoader.load('input.txt')
 
 puts LargestIDFinder.find(data)
+
+max = LargestIDFinder.find(data)
+seats = LargestIDFinder.return_all_ids(data)
+
+puts MissingSeatFinder.find(seats, max)
