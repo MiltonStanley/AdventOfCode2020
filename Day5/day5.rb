@@ -61,7 +61,11 @@ class BinaryPartitioner
 end
 
 class MissingSeatFinder
-  def self.find(ids)
+  def self.find(ids, max)
+    (1..max).each do |i|
+      next if ids.include? i
+
+    end
     11
   end
 end
@@ -135,7 +139,7 @@ end
 class MissingSeatFinderTest < Minitest::Test
   def test_find_missing_seat
     ids = [3, 4, 5, 6, 7, 8, 9, 10, 12]
-    id = MissingSeatFinder.find(ids)
+    id = MissingSeatFinder.find(ids, 12)
     assert_equal(11, id)
   end
 end
