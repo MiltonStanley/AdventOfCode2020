@@ -88,9 +88,9 @@ class Passport < Hash
     (2020..2030).include? eyr.to_i
   end
 
-  def hgt_valid?(hgt)
-    num = height[..-3].to_i
-    unit = height[-2..]
+  def self.hgt_valid?(hgt)
+    num = hgt[..-3].to_i
+    unit = hgt[-2..]
     if unit == 'cm'
       return (150..193).include?(num)
     elsif unit == 'in'
@@ -280,6 +280,17 @@ class PassportTest < Minitest::Test
       '2031' => false
     }.each do |year, expected|
       actual = Passport.send(:eyr_valid?, year)
+      assert_equal(expected, actual)
+    end
+  end
+
+  def test_hgt_valid?
+    { '60in' => true,
+      '190cm' => true,
+      '190in' => false,
+      '190' => false
+    }.each do |hgt, expected|
+      actual = Passport.send(:hgt_valid?, hgt)
       assert_equal(expected, actual)
     end
   end
