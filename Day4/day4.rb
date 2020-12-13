@@ -121,11 +121,11 @@ end
 
 # Count how many passports are valid
 class ValidPassportCounter
-  def self.get_valid_count(data)
+  def self.get_valid_count(data, validity=false)
     valid_count = 0
     all_passports = DataConverter.convert(data)
     all_passports.each do |this_passport|
-      valid_count += 1 if this_passport.valid?
+      valid_count += 1 if this_passport.valid?(validity)
     end
     valid_count
   end
@@ -356,3 +356,4 @@ end
 data = DataLoader.load('input.txt')
 
 puts ValidPassportCounter.get_valid_count(data)
+puts ValidPassportCounter.get_valid_count(data, true)
