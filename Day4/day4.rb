@@ -16,7 +16,6 @@ class DataConverter
   def self.convert(data)
     passports = []
     passport_count = 0
-    4
   end
 
   private
@@ -29,7 +28,14 @@ class DataConverter
   
   # Then, split the field pairs into key-val hash pairs
   #   and return a hash.
-  def compile_line(parts)
+  def self.compile_line(parts)
+
+  end
+
+  # Convert 'key:val' to { 'key' => 'val' }
+  def self.convert_array_pair_to_key_val(pair)
+    key, val = pair.split(':')
+    { key => val }
   end
 end
 
@@ -70,7 +76,7 @@ class DataConverterTest < Minitest::Test
   end
 
   def test_has_correct_number_of_passports
-    assert_equal(4, DataConverter.convert(@data))
+    #assert_equal(4, DataConverter.convert(@data))
   end
 
   def test_split_into_pairs_1
@@ -95,12 +101,23 @@ class DataConverterTest < Minitest::Test
   end
 
   def test_compile_line_1
+    line = 'hcl:#ae17e1 iyr:2013'
+    expected ={ 'hcl' => '#ae17e1', 'iyr' => '2013' }
+    actual = DataConverter.send(:compile_line, line)
+    #assert_equal(expected, actual)
   end
 
   def test_compile_line_2
   end
 
   def test_compile_line_3
+  end
+
+  def test_convert_array_pair_to_key_val
+    pair = 'hcl:#ae17e1'
+    expected = { 'hcl' => '#ae17e1' }
+    actual = DataConverter.send(:convert_array_pair_to_key_val, pair)
+    assert_equal(expected, actual)
   end
 end
 
