@@ -69,8 +69,6 @@ class Passport < Hash
 
   def field_is_valid?(field)
     rules = {
-
-      'ecl' => %w[amb blu brn gry grn hzl oth],
       'pid' => /^\d{9}$/
     }
   end
@@ -103,8 +101,8 @@ class Passport < Hash
     hcl.match? /^#([a-fA-F]|\d){6}$/
   end
 
-  def ecl_valid?(ecl)
-    (1920..2002).include? byr
+  def self.ecl_valid?(ecl)
+    %w[amb blu brn gry grn hzl oth].include? ecl
   end
 
   def pid_valid?(pid)
@@ -301,6 +299,15 @@ class PassportTest < Minitest::Test
     }.each do |hcl, expected|
       actual = Passport.send(:hcl_valid?, hcl)
       assert_equal(expected, actual, "#{hcl}")
+    end
+  end
+
+  def test_ecl_valid?
+    { 'brn' => true,
+      'wat' => false,
+    }.each do |ecl, expected|
+      actual = Passport.send(:ecl_valid?, ecl)
+      assert_equal(expected, actual, "#{ecl}")
     end
   end
 end
