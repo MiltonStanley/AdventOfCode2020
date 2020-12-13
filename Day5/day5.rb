@@ -17,6 +17,8 @@ class BinaryPartitioner
     seat = code[7..9]
     row = convert(row)
     seat = convert(seat)
+    id = calculate_seat_id([row, seat])
+    return [row, seat, id]
   end
 
   def self.calculate_seat_id(seat)
@@ -56,7 +58,7 @@ class BinaryPartitionerTest < Minitest::Test
       'BBFFBBFRLL' => [102, 4, 820]
     }.each do |code, expected|
       actual = BinaryPartitioner.partition(code)
-    #  assert_equal(expected,actual)
+      assert_equal(expected,actual)
     end
   end
 
