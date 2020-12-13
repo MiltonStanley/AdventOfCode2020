@@ -68,6 +68,10 @@ class MissingSeatFinder
     end
     11
   end
+
+  def self.neighbors_exist?(id, ids)
+    (ids.include?(id-1) && ids.include?(id+1))
+  end
 end
 
 class DataloaderTest < Minitest::Test
@@ -137,10 +141,25 @@ class LargestIDFinderTest <Minitest::Test
 end
 
 class MissingSeatFinderTest < Minitest::Test
+  def setup
+    @ids = [3, 4, 5, 6, 7, 8, 9, 10, 12]
+  end
+
   def test_find_missing_seat
-    ids = [3, 4, 5, 6, 7, 8, 9, 10, 12]
-    id = MissingSeatFinder.find(ids, 12)
+    id = MissingSeatFinder.find(@ids, 12)
     assert_equal(11, id)
+  end
+
+  def test_neighbors_exist?
+    {
+      4 => true,
+      10 => false,
+      11 => true,
+      12 => false
+    }.each do |id, expected|
+      actual = MissingSeatFinder.send(:neighbors_exist?, id, @ids)
+      assert_equal(expected, actual)
+    end
   end
 end
 
