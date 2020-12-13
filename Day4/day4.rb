@@ -60,7 +60,7 @@ end
 class Passport < Hash
   def valid?
     !(self['byr'].nil? || self['iyr'].nil? || self['eyr'].nil? || self['hgt'].nil? || 
-      self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil? || self['cid'].nil?)
+      self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil?)# || self['cid'].nil?)
   end
 end
 
@@ -165,6 +165,6 @@ class PassportTest < Minitest::Test
     @all_passports.each do |this_passport|
       valid_count += 1 if this_passport.valid?
     end
-    #assert_equal(2, valid_count)
+    assert_equal(2, valid_count)
   end
 end
