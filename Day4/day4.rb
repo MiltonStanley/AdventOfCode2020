@@ -16,14 +16,18 @@ class DataConverter
   def self.convert(data)
     passports = []
     total_passport_count = 0
-
+    passports[total_passport_count] = Hash.new
     data.each do |line|
-      total_passport_count += 1 if line.strip.empty?
-
+      if line.strip.empty?
+        total_passport_count += 1
+        passports[total_passport_count] = Hash.new
+        next
+      end
       compile_line = compile_line(split_into_fields(line))
 
+      passports[total_passport_count].merge!(compile_line)
     end
-    4
+    passports
   end
 
   private
@@ -57,10 +61,6 @@ class Passport < Hash
   def valid?
     !(@byr.nil? && @iyr.nil? && @eyr.nil? && @hgt.nil? && @hcl.nil? && @ecl.nil? && @pid.nil? && @cid.nil?)
   end
-
-  def merge(new_hash)
-    self.merge!(new_hash)
-  end
 end
 
 ### TESTS ###
@@ -81,7 +81,7 @@ class DataConverterTest < Minitest::Test
   end
 
   def test_has_correct_number_of_passports
-    assert_equal(4, DataConverter.convert(@data))
+    assert_equal(4, DataConverter.convert(@data).length)
   end
 
   def test_split_into_pairs_1
@@ -132,6 +132,13 @@ class DataConverterTest < Minitest::Test
     actual = DataConverter.send(:convert_array_pair_to_key_val, pair)
     assert_equal(expected, actual)
   end
+
+  def test_convert
+    expected = '#ae17e1'
+    passports = DataConverter.convert(@data)
+    actual = passports[2]['hcl']
+    assert_equal(expected, actual)
+  end
 end
 
 class PassportTest < Minitest::Test
@@ -145,8 +152,8 @@ class PassportTest < Minitest::Test
 
   def test_merge
     expected = { 'hcl' => '#ae17e1', 'iyr' => '2013' }
-    @passport.merge({ 'hcl' => '#ae17e1' })
-    @passport.merge({ 'iyr' => '2013' } )
+    @passport.merge!({ 'hcl' => '#ae17e1' })
+    @passport.merge!({ 'iyr' => '2013' } )
     assert_equal(expected, @passport)
   end
 end
