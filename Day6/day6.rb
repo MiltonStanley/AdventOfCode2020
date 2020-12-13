@@ -13,7 +13,7 @@ end
 
 # Takes DataLoader.data as input; outputs an array of group answers
 class DataConverter
-  def self.convert(data)
+  def self.convert(data, part2=false)
     group_answers = []
     total_group_count = 0
     group_answers[total_group_count] = []
@@ -24,13 +24,26 @@ class DataConverter
         next
       end
       answers_array = split_line_into_answers(line)
-      combine_with_other_group_answers(group_answers[total_group_count], answers_array)
-      group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
+      unless part2
+        combine_with_other_group_answers(group_answers[total_group_count], answers_array)
+        group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
+      end
+      if part2
+        # combine_same_answers(group_answers[total_group_count], answers_array)
+      end
     end
     group_answers
   end
 
   private
+
+  # Only return values that are in both arrays
+  def self.combine_same_answers(group, single)
+    in_both = []
+    group.each { |i| single.include?(i) ? in_both << i : next }
+    single.each { |i| group.include?(i) ? in_both << i : next }
+    in_both
+  end
 
   # First, split the line into individual answers into an array
   def self.split_line_into_answers(line)
@@ -104,13 +117,31 @@ class DataConverterTest < Minitest::Test
     assert_equal(5, DataConverter.convert(@data).length)
   end
 
-  def test_has_right_answers_per_group
+  def test_has_right_answers_per_group_part1
     answers = [3, 3, 3, 1, 1]
     answers.each_index do |i|
       groups = DataConverter.convert(@data)
       expected = answers[i]
       actual = groups[i].length
       assert_equal(expected, actual)
+    end
+  end
+
+  def test_combine_same_answers
+    group = %w[a b c]
+    single = %w[b c d]
+    expected = %w[b c b c]
+    actual = DataConverter.send(:combine_same_answers, group, single)
+    assert_equal(expected, actual)
+  end
+
+  def test_has_right_answers_per_group_part2
+    answers = [3, 0, 1, 1, 1]
+    answers.each_index do |i|
+      groups = DataConverter.convert(@data, true)
+      expected = answers[i]
+      actual = groups[i].length
+      #assert_equal(expected, actual, "#{i+1} - #{groups[i]}")
     end
   end
 end
@@ -124,3 +155,7 @@ class DataloaderTest < Minitest::Test
     assert_equal(15, DataLoader.load(@test_file).length)
   end
 end
+
+data = DataLoader.load('input.txt')
+groups = DataConverter.convert(data)
+puts GroupCountSummer.sum(groups)
