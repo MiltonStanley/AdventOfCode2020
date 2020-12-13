@@ -64,6 +64,11 @@ class Passport < Hash
   end
 end
 
+# Count how many passports are valid
+class ValidPassportCounter
+
+end
+
 ### TESTS ###
 
 class DataloaderTest < Minitest::Test
@@ -144,8 +149,6 @@ end
 
 class PassportTest < Minitest::Test
   def setup
-    @data = DataLoader.load('test_input.txt')
-    @all_passports = DataConverter.convert(@data)
     @passport = Passport.new
   end
 
@@ -158,6 +161,13 @@ class PassportTest < Minitest::Test
     @passport.merge!({ 'hcl' => '#ae17e1' })
     @passport.merge!({ 'iyr' => '2013' } )
     assert_equal(expected, @passport)
+  end
+end
+
+class ValidPassportCounterTest < Minitest::Test
+  def setup
+    @data = DataLoader.load('test_input.txt')
+    @all_passports = DataConverter.convert(@data)
   end
 
   def test_valid_count
