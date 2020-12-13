@@ -15,7 +15,15 @@ end
 class DataConverter
   def self.convert(data)
     passports = []
-    passport_count = 0
+    total_passport_count = 0
+
+    data.each do |line|
+      total_passport_count += 1 if line.strip.empty?
+
+      compile_line = compile_line(split_into_fields(line))
+
+    end
+    4
   end
 
   private
@@ -81,7 +89,7 @@ class DataConverterTest < Minitest::Test
   end
 
   def test_has_correct_number_of_passports
-    #assert_equal(4, DataConverter.convert(@data))
+    assert_equal(4, DataConverter.convert(@data))
   end
 
   def test_split_into_pairs_1
