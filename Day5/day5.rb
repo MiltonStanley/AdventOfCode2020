@@ -20,7 +20,8 @@ class BinaryPartitioner
   end
 
   def self.convert(code)
-    code.to_i(2)
+    binary = convert_code_to_binary(code)
+    binary.to_i(2)
   end
 
   def self.convert_code_to_binary(code)
@@ -55,13 +56,13 @@ class BinaryPartitionerTest < Minitest::Test
     end
   end
 
-  def test_partitioner
+  def test_convert
     {
       'FBFBBFF' => 44,
       'RLR' => 5
     }.each do |code, expected|
       actual = BinaryPartitioner.send(:convert, code)
-      #assert_equal(expected, actual)
+      assert_equal(expected, actual)
     end
   end
 
