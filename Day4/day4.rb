@@ -16,11 +16,11 @@ class DataConverter
   def self.convert(data)
     passports = []
     total_passport_count = 0
-    passports[total_passport_count] = Hash.new
+    passports[total_passport_count] = Passport.new
     data.each do |line|
       if line.strip.empty?
         total_passport_count += 1
-        passports[total_passport_count] = Hash.new
+        passports[total_passport_count] = Passport.new
         next
       end
       compile_line = compile_line(split_into_fields(line))
@@ -59,7 +59,8 @@ end
 # Passport info holder
 class Passport < Hash
   def valid?
-    !(@byr.nil? && @iyr.nil? && @eyr.nil? && @hgt.nil? && @hcl.nil? && @ecl.nil? && @pid.nil? && @cid.nil?)
+    !(self['byr'].nil? || self['iyr'].nil? || self['eyr'].nil? || self['hgt'].nil? || 
+      self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil? || self['cid'].nil?)
   end
 end
 
@@ -143,6 +144,8 @@ end
 
 class PassportTest < Minitest::Test
   def setup
+    @data = DataLoader.load('test_input.txt')
+    @all_passports = DataConverter.convert(@data)
     @passport = Passport.new
   end
 
@@ -155,5 +158,13 @@ class PassportTest < Minitest::Test
     @passport.merge!({ 'hcl' => '#ae17e1' })
     @passport.merge!({ 'iyr' => '2013' } )
     assert_equal(expected, @passport)
+  end
+
+  def test_valid_count
+    valid_count = 0
+    @all_passports.each do |this_passport|
+      valid_count += 1 if this_passport.valid?
+    end
+    #assert_equal(2, valid_count)
   end
 end
