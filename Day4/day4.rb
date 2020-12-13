@@ -58,8 +58,8 @@ end
 
 # Passport info holder
 class Passport < Hash
-  def valid?
-    (contains_all_fields?)
+  def valid?(validation=false)
+    return contains_all_fields? && ( !validation || all_fields_are_valid?)
   end
 
   def contains_all_fields?
