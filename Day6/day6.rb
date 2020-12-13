@@ -47,7 +47,27 @@ class DataConverter
     group.uniq
   end
 end
+
+# Sums the answers for all groups
+class GroupCountSummer
+  def self.sum(group_answers)
+    sum = 0
+    group_answers.each { |g| sum += g.length }
+    sum
+  end
+end
+
 ### TESTS ###
+
+class GroupCountSummerTest < Minitest::Test
+  def test_sum
+    data = DataLoader.load('test_input.txt')
+    groups = DataConverter.convert(data)
+    actual = GroupCountSummer.sum(groups)
+    expected = 11
+    assert_equal(expected, actual)
+  end
+end
 
 class DataConverterTest < Minitest::Test
   def setup
