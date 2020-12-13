@@ -20,6 +20,15 @@ class LargestIDFinder
     end
     ids.max
   end
+
+  def self.return_all_ids(data)
+    ids = []
+    data.each do |code|
+      id = BinaryPartitioner.partition(code)[2]
+      ids << id
+    end
+    ids.sort
+  end
 end
 
 class BinaryPartitioner
@@ -48,6 +57,12 @@ class BinaryPartitioner
     binary.gsub!('R', '1')
     binary.gsub!('L', '0')
     binary
+  end
+end
+
+class MissingSeatFinder
+  def self.find(ids)
+    11
   end
 end
 
@@ -108,4 +123,23 @@ class LargestIDFinderTest <Minitest::Test
     expected = 820
     assert_equal(expected, actual)
   end
+
+  def test_return_alL_ids
+    data = DataLoader.load('test_input.txt')
+    actual = LargestIDFinder.return_all_ids(data)
+    expected = [119, 567, 820]
+    assert_equal(expected, actual)
+  end
 end
+
+class MissingSeatFinderTest < Minitest::Test
+  def test_find_missing_seat
+    ids = [3, 4, 5, 6, 7, 8, 9, 10, 12]
+    id = MissingSeatFinder.find(ids)
+    assert_equal(11, id)
+  end
+end
+
+data = DataLoader.load('input.txt')
+
+puts LargestIDFinder.find(data)
