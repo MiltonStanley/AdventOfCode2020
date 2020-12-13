@@ -67,8 +67,16 @@ class Passport < Hash
       self['hcl'].nil? || self['ecl'].nil? || self['pid'].nil?)# || self['cid'].nil?)
   end
 
-  def field_is_valid?(field)
-
+  def all_fields_are_valid?
+    validity = []
+    validity << (self.class.byr_valid? self['byr'])
+    validity << (self.class.iyr_valid? self['iyr'])
+    validity << (self.class.eyr_valid? self['eyr'])
+    validity << (self.class.hgt_valid? self['hgt'])
+    validity << (self.class.hcl_valid? self['hcl'])
+    validity << (self.class.ecl_valid? self['ecl'])
+    validity << (self.class.pid_valid? self['pid'])
+    !(validity.include? false) # If validity includes 'false', return false
   end
 
   def self.byr_valid?(byr)
@@ -84,6 +92,7 @@ class Passport < Hash
   end
 
   def self.hgt_valid?(hgt)
+    return false if hgt.nil?
     num = hgt[..-3].to_i
     unit = hgt[-2..]
     if unit == 'cm'
@@ -96,6 +105,7 @@ class Passport < Hash
   end
 
   def self.hcl_valid?(hcl)
+    return false if hcl.nil?
     hcl.match? /^#([a-fA-F]|\d){6}$/
   end
 
@@ -104,6 +114,7 @@ class Passport < Hash
   end
 
   def self.pid_valid?(pid)
+    return false if pid.nil?
     pid.match? /^\d{9}$/
   end
 end
@@ -247,6 +258,16 @@ class PassportTest < Minitest::Test
     @passport.merge!({ 'hcl' => '#ae17e1' })
     @passport.merge!({ 'iyr' => '2013' } )
     assert_equal(expected, @passport)
+  end
+
+  def test_fields_are_valid?
+    { @passport => false,
+      @passport_with_missing => false,
+      @passport_with_all => true
+    }.each do |passport, expected|
+      actual = passport.send(:all_fields_are_valid?)
+      assert_equal(expected, actual)
+    end
   end
 
   def test_byr_valid?
