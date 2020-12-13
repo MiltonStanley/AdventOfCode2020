@@ -54,20 +54,12 @@ end
 
 # Passport info holder
 class Passport < Hash
-
-  def initialize(*args)
-    @byr = args[:byr]
-    @iyr = args[:iyr]
-    @eyr = args[:eyr]
-    @hgt = args[:hgt]
-    @hcl = args[:hcl]
-    @ecl = args[:ecl]
-    @pid = args[:pid]
-    @cid = args[:cid]
+  def valid?
+    !(@byr.nil? && @iyr.nil? && @eyr.nil? && @hgt.nil? && @hcl.nil? && @ecl.nil? && @pid.nil? && @cid.nil?)
   end
 
-  def self.valid?
-    !(@byr.nil? && @iyr.nil? && @eyr.nil? && @hgt.nil? && @hcl.nil? && @ecl.nil? && @pid.nil? && @cid.nil?)
+  def merge(new_hash)
+    self.merge!(new_hash)
   end
 end
 
@@ -143,7 +135,18 @@ class DataConverterTest < Minitest::Test
 end
 
 class PassportTest < Minitest::Test
+  def setup
+    @passport = Passport.new
+  end
+
   def test_valid?
-    assert_equal(false, Passport.valid?)
+    assert_equal(false, @passport.valid?)
+  end
+
+  def test_merge
+    expected = { 'hcl' => '#ae17e1', 'iyr' => '2013' }
+    @passport.merge({ 'hcl' => '#ae17e1' })
+    @passport.merge({ 'iyr' => '2013' } )
+    assert_equal(expected, @passport)
   end
 end
