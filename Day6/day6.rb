@@ -140,14 +140,6 @@ class DataConverterTest < Minitest::Test
     assert_equal(expected, actual)
   end
 
-  def test_find_matches_for_part2_group0
-    expected = %w[a b c]
-    line = %w[a b c]
-    actual = DataConverter.send(:convert, line, true)
-    #all = group.inject(:&)
-    #assert_equal(expected, actual)
-  end
-
   def test_build_group_part2_group0
     expected = [%w[a b c]]
     line = %w[a b c]
