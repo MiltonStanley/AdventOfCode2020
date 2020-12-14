@@ -35,14 +35,13 @@ class DataConverter
         group_answers[group_count] = build_group(group_answers[group_count], answers_array)
       end
     end
+    group_answers[group_count] = group_finalizer(group_answers[group_count]) if part2
     group_answers
   end
 
   private
 
   def self.group_finalizer(group)
-    puts
-    puts "#{group}"
     group.inject(:&).flatten
   end
 
@@ -184,3 +183,6 @@ end
 data = DataLoader.load('input.txt')
 groups = DataConverter.convert(data)
 puts GroupCountSummer.sum(groups)
+
+groups2 = DataConverter.convert(data, true)
+puts GroupCountSummer.sum(groups2)
