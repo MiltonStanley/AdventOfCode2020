@@ -19,6 +19,7 @@ class DataConverter
     group_answers[total_group_count] = []
     data.each do |line|
       if line.strip.empty?
+
         total_group_count += 1
         group_answers[total_group_count] = []
         next
@@ -27,6 +28,9 @@ class DataConverter
       unless part2
         combine_with_other_group_answers(group_answers[total_group_count], answers_array)
         group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
+      end
+      if part2
+        group_answers[total_group_count] = build_group(group_answers[total_group_count], answers_array)
       end
       # if part2
       #   part2_combine_ans(group_answers[total_group_count], answers_array)
@@ -37,6 +41,10 @@ class DataConverter
   end
 
   private
+
+  def self.group_finalizer(group)
+    group.inject(:&).flatten
+  end
 
   def self.build_group(group, single)
     group << single
@@ -125,10 +133,19 @@ class DataConverterTest < Minitest::Test
     end
   end
 
-  def test_combine_same_answers_group_1
-    group = [['a'], ['b'], ['c']]
-    all = group.inject(:&)
-    assert_equal([], all)
+  def test_part2_group_finalizer
+    group = [[["a"], ["b"], ["c"]]]
+    expected = %w[a b c]
+    actual = DataConverter.send(:group_finalizer, group)
+    assert_equal(expected, actual)
+  end
+
+  def test_find_matches_for_part2_group0
+    expected = %w[a b c]
+    line = %w[a b c]
+    actual = DataConverter.send(:convert, line, true)
+    #all = group.inject(:&)
+    #assert_equal(expected, actual)
   end
 
   def test_build_group_part2_group0
