@@ -15,22 +15,24 @@ end
 class DataConverter
   def self.convert(data, part2=false)
     group_answers = []
-    total_group_count = 0
-    group_answers[total_group_count] = []
+    group_count = 0
+    group_answers[group_count] = []
     data.each do |line|
       if line.strip.empty?
-
-        total_group_count += 1
-        group_answers[total_group_count] = []
+        if part2
+          group_answers[group_count] = group_finalizer(group_answers[group_count])
+        end
+        group_count += 1
+        group_answers[group_count] = []
         next
       end
       answers_array = split_line_into_answers(line)
       unless part2
-        combine_with_other_group_answers(group_answers[total_group_count], answers_array)
-        group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
+        combine_with_other_group_answers(group_answers[group_count], answers_array)
+        group_answers[group_count] = clean_up_duplicates(group_answers[group_count])
       end
       if part2
-        group_answers[total_group_count] = build_group(group_answers[total_group_count], answers_array)
+        group_answers[group_count] = build_group(group_answers[group_count], answers_array)
       end
     end
     group_answers
@@ -39,6 +41,8 @@ class DataConverter
   private
 
   def self.group_finalizer(group)
+    puts
+    puts "#{group}"
     group.inject(:&).flatten
   end
 
@@ -127,6 +131,13 @@ class DataConverterTest < Minitest::Test
       actual = groups[i].length
       assert_equal(expected, actual)
     end
+  end
+
+  def test_convert_part2_group0
+    data = ['abc']
+    expected = [%w[a b c]]
+    actual = DataConverter.convert(data, true)
+    assert_equal(expected, actual)
   end
 
   def test_part2_group_finalizer
