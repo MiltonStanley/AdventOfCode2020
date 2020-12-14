@@ -131,7 +131,7 @@ class DataConverterTest < Minitest::Test
     assert_equal([], all)
   end
 
-  def test_build_group_part2_group1
+  def test_build_group_part2_group0
     expected = [%w[a b c]]
     line = %w[a b c]
     actual = DataConverter.send(:build_group, [], line)
