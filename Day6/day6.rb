@@ -137,6 +137,22 @@ class DataConverterTest < Minitest::Test
     actual = DataConverter.send(:build_group, [], line)
     assert_equal(expected, actual)
   end
+
+  def test_build_group_part2_group1
+    expected = [['a'], ['b'], ['c']]
+    lines = [['a'], ['b'], ['c']]
+    actual = []
+    lines.each { |line| actual = DataConverter.send(:build_group, actual, line) }
+    assert_equal(expected, actual)
+  end
+
+  def test_build_group_part2_group2
+    expected = [['a', 'b'], ['a', 'c']]
+    lines = [['a', 'b'], ['a', 'c']]
+    actual = []
+    lines.each { |line| actual = DataConverter.send(:build_group, actual, line) }
+    assert_equal(expected, actual)
+  end
 end
 
 class DataloaderTest < Minitest::Test
