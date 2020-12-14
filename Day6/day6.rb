@@ -28,21 +28,19 @@ class DataConverter
         combine_with_other_group_answers(group_answers[total_group_count], answers_array)
         group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
       end
-      if part2
-        #combine_with_other_group_answers(group_answers[total_group_count], answers_array)
-
-      #  break
-      end
+      # if part2
+      #   part2_combine_ans(group_answers[total_group_count], answers_array)
+      #   break
+      # end
     end
     group_answers
   end
 
   private
 
-  # Only return values that are in both arrays
-  def self.combine_same_answers(group, single)
-    in_both = group & single
-    in_both
+  def self.build_group(group, single)
+    group << single
+    group
   end
 
   # First, split the line into individual answers into an array
@@ -127,36 +125,17 @@ class DataConverterTest < Minitest::Test
     end
   end
 
-  def test_combine_same_answers
-    group = %w[a b c]
-    single = %w[b c d]
-    expected = %w[b c]
-    actual = DataConverter.send(:combine_same_answers, group, single)
-    assert_equal(expected, actual)
-  end
-
-  def test_combine_same_answers_group_0
-    group = %w[]
-    single = %w[a b c]
-    expected = %w[a b c]
-    actual = DataConverter.send(:combine_same_answers, group, single)
-    #assert_equal(expected, actual)
-  end
-
   def test_combine_same_answers_group_1
     group = [['a'], ['b'], ['c']]
     all = group.inject(:&)
     assert_equal([], all)
   end
 
-  def test_has_right_answers_per_group_part2
-    answers = [3, 0, 1, 1, 1]
-    answers.each_index do |i|
-      groups = DataConverter.convert(@data, true)
-      expected = answers[i]
-      actual = groups[i].length
-    #  assert_equal(expected, actual, "#{i} - #{groups[i]}")
-    end
+  def test_build_group_part2_group1
+    expected = [%w[a b c]]
+    line = %w[a b c]
+    actual = DataConverter.send(:build_group, [], line)
+    assert_equal(expected, actual)
   end
 end
 
