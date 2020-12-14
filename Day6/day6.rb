@@ -32,10 +32,6 @@ class DataConverter
       if part2
         group_answers[total_group_count] = build_group(group_answers[total_group_count], answers_array)
       end
-      # if part2
-      #   part2_combine_ans(group_answers[total_group_count], answers_array)
-      #   break
-      # end
     end
     group_answers
   end
