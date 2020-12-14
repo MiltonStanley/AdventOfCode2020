@@ -29,7 +29,9 @@ class DataConverter
         group_answers[total_group_count] = clean_up_duplicates(group_answers[total_group_count])
       end
       if part2
-        # combine_same_answers(group_answers[total_group_count], answers_array)
+        #combine_with_other_group_answers(group_answers[total_group_count], answers_array)
+
+      #  break
       end
     end
     group_answers
@@ -39,9 +41,7 @@ class DataConverter
 
   # Only return values that are in both arrays
   def self.combine_same_answers(group, single)
-    in_both = []
-    group.each { |i| single.include?(i) ? in_both << i : next }
-    single.each { |i| group.include?(i) ? in_both << i : next }
+    in_both = group & single
     in_both
   end
 
@@ -130,9 +130,23 @@ class DataConverterTest < Minitest::Test
   def test_combine_same_answers
     group = %w[a b c]
     single = %w[b c d]
-    expected = %w[b c b c]
+    expected = %w[b c]
     actual = DataConverter.send(:combine_same_answers, group, single)
     assert_equal(expected, actual)
+  end
+
+  def test_combine_same_answers_group_0
+    group = %w[]
+    single = %w[a b c]
+    expected = %w[a b c]
+    actual = DataConverter.send(:combine_same_answers, group, single)
+    #assert_equal(expected, actual)
+  end
+
+  def test_combine_same_answers_group_1
+    group = [['a'], ['b'], ['c']]
+    all = group.inject(:&)
+    assert_equal([], all)
   end
 
   def test_has_right_answers_per_group_part2
@@ -141,7 +155,7 @@ class DataConverterTest < Minitest::Test
       groups = DataConverter.convert(@data, true)
       expected = answers[i]
       actual = groups[i].length
-      #assert_equal(expected, actual, "#{i+1} - #{groups[i]}")
+    #  assert_equal(expected, actual, "#{i} - #{groups[i]}")
     end
   end
 end
